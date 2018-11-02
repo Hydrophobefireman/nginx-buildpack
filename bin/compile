@@ -122,7 +122,7 @@ build-nginx() {
             --with-pcre=pcre-$NGINX_PCRE_VERSION \
             --add-module=$PWD/headers-more-nginx-module-$NGINX_HEADERS_MORE_VERSION \
             --add-module=$PWD/ngx_devel_kit-$NGINX_DEVEL_KIT_VERSION \
-            --add-module=$PWD/$nps_dir \
+            --add-module=$nps_dir \
             --add-module=$PWD/lua-nginx-module-$NGINX_LUA_VERSION \
             --with-http_addition_module \
             --with-http_dav_module \
