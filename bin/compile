@@ -136,6 +136,7 @@ build-nginx() {
 
         mkdir -p $nginx_install_dir
         make install
+        cp $nginx_install_dir /app -r
 
         unset LUAJIT_LIB
         unset LUAJIT_INC
