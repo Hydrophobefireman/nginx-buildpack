@@ -123,6 +123,7 @@ build-nginx() {
             --add-module=$PWD/headers-more-nginx-module-$NGINX_HEADERS_MORE_VERSION \
             --add-module=$PWD/ngx_devel_kit-$NGINX_DEVEL_KIT_VERSION \
             --add-module=$nps_dir \
+            --add-module=$brotli_dir\
             --add-module=$PWD/lua-nginx-module-$NGINX_LUA_VERSION \
             --with-http_addition_module \
             --with-http_dav_module \
@@ -143,6 +144,15 @@ build-nginx() {
     )
 }
 
+brotli-stuff(){
+    mkdir -p /tmp/nginx-build
+    cd /tmp/nginx-build
+    announce "brotli module test"
+    git clone https://github.com/google/ngx_brotli.git -v
+    cd ngx_brotli 
+    git submodule update --init --recursive
+    brotli_dir=$PWD
+}
 install-nginx-lua() {
     declare nginx_lua_dir=/tmp/nginx-lua
     declare resty_redis_url=https://github.com/openresty/lua-resty-redis/archive/v$RESTY_REDIS_VERSION.tar.gz
