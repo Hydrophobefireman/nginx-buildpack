@@ -7,7 +7,9 @@ main() {
     ENV_DIR=$3
     BUILDPACK_DIR=$(readlink -f $(dirname $(type -P "$0"))/..)
     LUA_JIT_DIR=$BUILD_DIR/vendor/lua_jit
-
+    PS_NGX_EXTRA_FLAGS="--with-cc=/usr/lib/gcc-mozilla/bin/gcc  --with-ld-opt=-static-libstdc++"
+    
+    NPS_VERSION=1.13.35.2-stable
     LUA_JIT_VERSION=2.0.4
     NGINX_VERSION=1.8.0
     NGINX_PCRE_VERSION=8.37
@@ -19,7 +21,16 @@ main() {
     set -eo pipefail
 
     load-env
-
+    wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
+    unzip v${NPS_VERSION}.zip
+    nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
+    cd "$nps_dir"
+    NPS_RELEASE_NUMBER=${NPS_VERSION/stable/}
+    psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz
+    [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
+    wget ${psol_url}
+    tar -xzvf $(basename ${psol_url})  
+    
     announce "Building LuaJIT $LUA_JIT_VERSION"
     build-lua
 
@@ -104,6 +115,7 @@ build-nginx() {
             --with-pcre=pcre-$NGINX_PCRE_VERSION \
             --add-module=$PWD/headers-more-nginx-module-$NGINX_HEADERS_MORE_VERSION \
             --add-module=$PWD/ngx_devel_kit-$NGINX_DEVEL_KIT_VERSION \
+            --add-module=$HOME/$nps_dir ${PS_NGX_EXTRA_FLAGS}\
             --add-module=$PWD/lua-nginx-module-$NGINX_LUA_VERSION \
             --with-http_addition_module \
             --with-http_dav_module \
