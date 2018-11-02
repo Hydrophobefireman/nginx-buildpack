@@ -7,7 +7,7 @@ main() {
     ENV_DIR=$3
     BUILDPACK_DIR=$(readlink -f $(dirname $(type -P "$0"))/..)
     LUA_JIT_DIR=$BUILD_DIR/vendor/lua_jit
-    PS_NGX_EXTRA_FLAGS="--with-cc=/usr/lib/gcc-mozilla/bin/gcc  --with-ld-opt=-static-libstdc++"
+    PS_NGX_EXTRA_FLAGS=""
     
     NPS_VERSION=1.13.35.2-stable
     LUA_JIT_VERSION=2.0.4
