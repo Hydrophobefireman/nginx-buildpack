@@ -22,17 +22,7 @@ main() {
 
     load-env
     pagespeed
-    pagespeed(){
-        wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
-        unzip v${NPS_VERSION}.zip
-        nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
-        cd "$nps_dir"
-        NPS_RELEASE_NUMBER=${NPS_VERSION/stable/}
-        psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz
-        [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
-        wget ${psol_url}
-        tar -xzvf $(basename ${psol_url}) 
-        }
+
     
     announce "Building LuaJIT $LUA_JIT_VERSION"
     build-lua
@@ -55,7 +45,20 @@ main() {
     cond-install $BUILDPACK_DIR/config/nginx.conf.erb config/nginx.conf.erb
     install-nginx-lua
 }
-
+ pagespeed(){
+        wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
+        announce "Fetched Pagespeed :${NPS_VERSION}"
+        unzip v${NPS_VERSION}.zip
+        nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
+        cd "$nps_dir"
+        NPS_RELEASE_NUMBER=${NPS_VERSION/stable/}
+        psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz
+        [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
+        wget ${psol_url}
+        announce "Fetched PSOL: ${psol_url}"
+        tar -xzvf $(basename ${psol_url}) 
+        
+    }
 load-env() {
     declare e
     for e in $ENV_DIR/*; do
