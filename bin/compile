@@ -7,7 +7,6 @@ main() {
     ENV_DIR=$3
     BUILDPACK_DIR=$(readlink -f $(dirname $(type -P "$0"))/..)
     LUA_JIT_DIR=$BUILD_DIR/vendor/lua_jit
-    PS_NGX_EXTRA_FLAGS=""
     
     NPS_VERSION=1.13.35.2-stable
     LUA_JIT_VERSION=2.0.4
@@ -91,7 +90,6 @@ build-lua() {
 build-nginx() {
     declare nginx_install_dir=$1
     declare nginx_build_dir=/tmp/nginx-build
-
     declare nginx_url=https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
     declare pcre_url=https://ftp.pcre.org/pub/pcre/pcre-$NGINX_PCRE_VERSION.tar.bz2
     declare headers_more_url=https://github.com/agentzh/headers-more-nginx-module/archive/v$NGINX_HEADERS_MORE_VERSION.tar.gz
@@ -121,7 +119,7 @@ build-nginx() {
             --with-pcre=pcre-$NGINX_PCRE_VERSION \
             --add-module=$PWD/headers-more-nginx-module-$NGINX_HEADERS_MORE_VERSION \
             --add-module=$PWD/ngx_devel_kit-$NGINX_DEVEL_KIT_VERSION \
-            --add-module=$HOME/$nps_dir ${PS_NGX_EXTRA_FLAGS}\
+            --add-module=$PWD/$nps_dir \
             --add-module=$PWD/lua-nginx-module-$NGINX_LUA_VERSION \
             --with-http_addition_module \
             --with-http_dav_module \
