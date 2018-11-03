@@ -37,6 +37,10 @@ http {
 		server_name _;
 		keepalive_timeout 5;
 		add_header	X-Frame-Options "SAMEORIGIN";
+		brotli_static	on;
+		brotli on;
+		brotli_types	text/plain text/css application/json application/javascript application/x-javascript text/javascript text/xml application/xml application/rss+xml application/atom+xml image/svg+xml application/rdf+xml;
+		brotli_comp_level	7;
 		pagespeed 	on;
 		pagespeed 	FileCachePath "/tmp/pagespeed/";
 		pagespeed 	XHeaderValue "Speedy";
@@ -70,7 +74,13 @@ http {
 			proxy_set_header Host $http_host;
 			proxy_redirect off;
 			proxy_pass http://app_server;
-		}		
+		}	
+		location /@/messenger {
+			proxy_pass http://app_server;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "Upgrade";
+		}	
 		location /static/ {
 			alias /app/static/;
 			try_files $uri =404;
