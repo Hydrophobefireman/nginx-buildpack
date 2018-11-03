@@ -113,7 +113,7 @@ build-nginx() {
         curl -#L $devel_kit_url | tar xz
         curl -#L $nginx_lua_url | tar xz
 
-        patch -p1 < $BUILDPACK_DIR/nginx-$NGINX_VERSION-heroku.patch
+        #patch -p1 < $BUILDPACK_DIR/nginx-$NGINX_VERSION-heroku.patch
 
         export LUAJIT_LIB=$LUA_JIT_DIR/lib
         export LUAJIT_INC=$LUA_JIT_DIR/include/luajit-2.0
