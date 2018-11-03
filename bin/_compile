@@ -21,6 +21,7 @@ main() {
 
     load-env
     pagespeed
+    brotli-stuff
 
     
     announce "Building LuaJIT $LUA_JIT_VERSION"
